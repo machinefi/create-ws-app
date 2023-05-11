@@ -13,7 +13,7 @@ export const simulatorInstructions = (args: Args) => `
 ${c.cyan("🤖 To get started with Simulator, type the following commands:")}
 cd ${args.directory}/simulator
 touch .env ${c.dim("// and add your w3bstream vars to .env file")}
-${c.bold("npm run start")}
+${c.bold("npm start")}
 `;
 
 export const blockchainInstructions = (args: Args) => `
