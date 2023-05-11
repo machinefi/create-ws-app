@@ -1,2 +1,1 @@
-require("./deviceRegistry");
-require("./deviceBinding");
+require("./welcome");
