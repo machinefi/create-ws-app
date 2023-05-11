@@ -11,6 +11,7 @@ import {
   copyTemplates,
   copyBlockchainFeatures,
   extractSubdirsAndFeatures,
+  copyAppletHandlers,
 } from "./utils/helpers.js";
 import meowCli from "./meow-cli.js";
 import { Args } from "./types.js";
@@ -25,7 +26,8 @@ const TEMPLATE_DIR_NAME = "../../templates";
 function copyFiles(args: Args) {
   fs.ensureDirSync(args.directory);
 
-  const { subdirs, blockchainFeatures } = extractSubdirsAndFeatures(args);
+  const { subdirs, blockchainFeatures, appletHandlers } =
+    extractSubdirsAndFeatures(args);
 
   copyTemplates(args.directory, TEMPLATE_DIR_NAME, subdirs);
 
@@ -36,6 +38,7 @@ function copyFiles(args: Args) {
       blockchainFeatures
     );
   }
+  copyAppletHandlers(args.directory, TEMPLATE_DIR_NAME, appletHandlers);
 }
 
 async function installDependencies(args: Args) {

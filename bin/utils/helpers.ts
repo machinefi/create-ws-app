@@ -9,36 +9,42 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 export function extractSubdirsAndFeatures(args: Args): {
   subdirs: string[];
   blockchainFeatures: string[];
+  appletHandlers: string[];
 } {
   const subdirs: string[] = ["applet"];
   const blockchainFeatures: string[] = [];
+  const appletHandlers: string[] = ["start"];
 
   if (args.binding || args.erc20 || args.erc721) {
-    addTemplate(subdirs, "blockchain");
+    pushStringToArray(subdirs, "blockchain");
     addBlockchainFeatures(args, blockchainFeatures);
   }
 
-  if (args.simulator) {
-    addTemplate(subdirs, "simulator");
+  if (args.binding) {
+    pushStringToArray(appletHandlers, "binding");
   }
 
-  return { subdirs, blockchainFeatures };
-}
+  if (args.simulator) {
+    pushStringToArray(subdirs, "simulator");
+  }
 
-function addTemplate(subdirs: string[], template: string) {
-  subdirs.push(template);
+  return { subdirs, blockchainFeatures, appletHandlers };
 }
 
 function addBlockchainFeatures(args: Args, blockchainFeatures: string[]) {
   if (args.binding) {
-    blockchainFeatures.push("binding");
+    pushStringToArray(blockchainFeatures, "binding");
   }
   if (args.erc20) {
-    blockchainFeatures.push("erc20");
+    pushStringToArray(blockchainFeatures, "erc20");
   }
   if (args.erc721) {
-    blockchainFeatures.push("erc721");
+    pushStringToArray(blockchainFeatures, "erc721");
   }
+}
+
+function pushStringToArray(subdirs: string[], template: string) {
+  subdirs.push(template);
 }
 
 export function copyTemplates(
@@ -84,6 +90,45 @@ function copyBlockchainFeature(
 
     fs.copySync(source, destination);
   });
+}
+
+export function copyAppletHandlers(
+  projectPath: string,
+  templatePath: string,
+  appletHandlers: string[]
+) {
+  appletHandlers.forEach((handler) => {
+    const templateSubdirPath = path.join(
+      __dirname,
+      templatePath,
+      "extensions",
+      "applet",
+      handler
+    );
+
+    const projectSubdirPath = path.join(projectPath, "applet", "assembly");
+    const projectHandlersPath = path.join(projectSubdirPath, "handlers");
+
+    copyAppletHandler(templateSubdirPath, projectHandlersPath);
+    addHandlerToIndex(projectSubdirPath, handler);
+  });
+}
+
+function copyAppletHandler(
+  templateSubdirPath: string,
+  projectSubdirPath: string
+) {
+  fs.copySync(templateSubdirPath, projectSubdirPath);
+}
+
+function addHandlerToIndex(projectSubdirPath: string, handler: string) {
+  const handlerIndex = path.join(projectSubdirPath, "index.ts");
+  if (handler === "binding") {
+    fs.appendFileSync(handlerIndex, `\nexport * from "./handlers/binding";`);
+  }
+  if (handler === "start") {
+    fs.appendFileSync(handlerIndex, `\nexport * from "./handlers/start";`);
+  }
 }
 
 function addFeatureTaskToIndex(projectSubdirPath: string, feature: string) {
