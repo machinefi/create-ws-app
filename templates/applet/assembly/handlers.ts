@@ -26,7 +26,7 @@ export function handle_device_registered(rid: i32): i32 {
 
   // Store the device id in the DB
   Log("Storing device id in DB...");
-  let sql = `INSERT INTO "DevicesRegistry" (device_id, is_registered, is_active) VALUES (?,?,?);`;
+  let sql = `INSERT INTO "devices_registry" (device_id, is_registered, is_active) VALUES (?,?,?);`;
   ExecSQL(sql, [new String(device_id), new Bool(true), new Bool(true)]);
   return 0;
 }
@@ -45,7 +45,7 @@ export function handle_device_binding(rid: i32): i32 {
 
   // Store the device binding in the DB
   Log("Storing device binding in DB...");
-  let sql = `INSERT INTO "DeviceBinding" (device_id, owner_address) VALUES (?,?);`;
+  let sql = `INSERT INTO "device_binding" (device_id, owner_address) VALUES (?,?);`;
   ExecSQL(sql, [new String(device_id), new String(owner_address)]);
   return 0;
 }
