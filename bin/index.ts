@@ -11,6 +11,7 @@ import {
   copyTemplates,
   copyBlockchainFeatures,
   extractSubdirsAndFeatures,
+  initBlockchainTemplate,
 } from "./utils/helpers.js";
 import meowCli from "./meow-cli.js";
 import { Args } from "./types.js";
@@ -30,6 +31,7 @@ function copyFiles(args: Args) {
   copyTemplates(args.directory, TEMPLATE_DIR_NAME, subdirs);
 
   if (args.blockchain) {
+    initBlockchainTemplate(args.directory);
     copyBlockchainFeatures(
       args.directory,
       TEMPLATE_DIR_NAME,
