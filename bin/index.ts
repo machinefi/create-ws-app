@@ -7,12 +7,12 @@ import path from "path";
 import c from "chalk";
 
 import { normalizeArgs } from "./utils/normalize-args.js";
+import { extractSubdirsAndFeatures } from "./utils/helpers.js";
 import {
   copyTemplates,
   copyBlockchainFeatures,
-  extractSubdirsAndFeatures,
   copyAppletHandlers,
-} from "./utils/helpers.js";
+} from "./utils/copy-files.js";
 import meowCli from "./meow-cli.js";
 import { Args } from "./types.js";
 import {
@@ -46,18 +46,19 @@ async function installDependencies(args: Args) {
 
   process.stdout.write("\n");
 
-  for (let i = 0; i < subdirs.length; i++) {
-    const subdir = subdirs[i];
-    const spinner = ora(`Installing dependencies for ${subdir}...`).start();
-
-    process.chdir(path.join(args.directory, subdir));
+  for (const [subdir] of Object.entries(subdirs)) {
+    const spinner = ora(`Installing ${c.bold(subdir)} dependencies...`);
+    spinner.start();
 
     try {
-      await execa("npm", ["install"]);
-      spinner.succeed(`${subdir} dependencies installed!`);
-    } catch (error) {
-      spinner.fail(`${subdir} dependencies failed to install!`);
-      throw error;
+      await execa("npm", ["install"], {
+        cwd: path.join(args.directory, subdir),
+      });
+      spinner.succeed();
+    } catch (err) {
+      spinner.fail();
+      console.error(err);
+      process.exit(1);
     }
   }
 

@@ -14,6 +14,7 @@ const cli: Result<Flags> = meow(
       --erc20, -e       Include an ERC20 token template
       --erc721, -n      Include an ERC721 token template
       --help            Display this message
+      --minimal, -m     Create a minimal applet without any tests and utils
   
     ${c.bold("EXAMPLES")}
       $ npx create-ws-app
@@ -38,6 +39,10 @@ const cli: Result<Flags> = meow(
       erc721: {
         type: "boolean",
         shortFlag: "n",
+      },
+      minimal: {
+        type: "boolean",
+        shortFlag: "m",
       },
     },
   }
