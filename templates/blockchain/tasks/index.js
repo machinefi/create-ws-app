@@ -1,0 +1,2 @@
+require("./deviceRegistry");
+require("./deviceBinding");

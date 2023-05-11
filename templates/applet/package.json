@@ -1,0 +1,30 @@
+{
+  "name": "applet",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "asp --verbose",
+    "asbuild:release": "asc assembly/handlers.ts --target release",
+    "asbuild": "npm run asbuild:release",
+    "start": "npx serve ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@as-pect/cli": "^8.1.0",
+    "@w3bstream/wasm-sdk": "^0.6.1",
+    "assemblyscript": "^0.27.0"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./build/release.js",
+      "types": "./build/release.d.ts"
+    }
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "description": ""
+}
