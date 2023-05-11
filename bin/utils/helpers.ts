@@ -6,7 +6,10 @@ import { Args } from "../types";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-export function extractSubdirsAndFeatures(args: Args) {
+export function extractSubdirsAndFeatures(args: Args): {
+  subdirs: string[];
+  blockchainFeatures: string[];
+} {
   const subdirs: string[] = ["applet"];
   const blockchainFeatures: string[] = [];
 
@@ -64,6 +67,15 @@ export function copyBlockchainFeatures(
 
     addFeatureTaskToIndex(projectSubdirPath, feature);
   });
+}
+
+export function initBlockchainTemplate(projectPath: string) {
+  const templateBlockchainPath = path.join(
+    __dirname,
+    "../../templates/blockchain"
+  );
+  const projectBlockchainPath = path.join(projectPath, "blockchain");
+  fs.copySync(templateBlockchainPath, projectBlockchainPath);
 }
 
 function copyBlockchainFeature(
