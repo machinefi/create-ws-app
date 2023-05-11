@@ -7,12 +7,7 @@ import { Flags } from "../types";
 
 export async function normalizeArgs(cli: Result<Flags>) {
   const directory = await normalizeDirectory(cli);
-  await normalizeSimulator(cli);
-  await normalizeBlockchain(cli);
-
-  if (cli.flags.blockchain) {
-    await normalizeBlockchainFeatures(cli);
-  }
+  await normalizeFlags(cli);
 
   return {
     directory,
@@ -28,23 +23,16 @@ async function normalizeDirectory(cli: Result<Flags>) {
   return path.resolve(directory);
 }
 
-async function normalizeBlockchain(cli: Result<Flags>) {
-  if (!cli.flags.blockchain) {
-    cli.flags.blockchain = await promtConfirmation("blockchain");
-  }
-}
-
-async function normalizeBlockchainFeatures(cli: Result<Flags>) {
+async function normalizeFlags(cli: Result<Flags>) {
   if (!cli.flags.erc20) {
     cli.flags.erc20 = await promtConfirmation("erc20");
   }
-
   if (!cli.flags.erc721) {
     cli.flags.erc721 = await promtConfirmation("erc721");
   }
-}
-
-async function normalizeSimulator(cli: Result<Flags>) {
+  if (!cli.flags.binding) {
+    cli.flags.binding = await promtConfirmation("binding");
+  }
   if (!cli.flags.simulator) {
     cli.flags.simulator = await promtConfirmation("simulator");
   }
@@ -67,11 +55,44 @@ async function promptDir() {
 }
 
 async function promtConfirmation(tmpName: string) {
+  const message = buildMessage(tmpName);
   const res = (await enquirer.prompt({
     type: "confirm",
     name: tmpName,
-    message: `Include a ${tmpName} template?`,
+    message,
     initial: true,
   })) as { [key: string]: boolean };
   return res[tmpName] as boolean;
+}
+
+function buildMessage(tmpName: string) {
+  const emoji = selectEmoji(tmpName);
+
+  switch (tmpName) {
+    case "simulator":
+      return `${emoji} include a device ${tmpName} template?`;
+    case "binding":
+      return `${emoji} include an onchain device registration and binding template?`;
+    case "erc20":
+      return `${emoji} include an ${tmpName} token template?`;
+    case "erc721":
+      return `${emoji} include an ${tmpName} token template?`;
+    default:
+      return "";
+  }
+}
+
+function selectEmoji(tmpName: string) {
+  switch (tmpName) {
+    case "binding":
+      return "👤";
+    case "erc20":
+      return "💰";
+    case "erc721":
+      return "🖼️ ";
+    case "simulator":
+      return "🤖";
+    default:
+      return "";
+  }
 }

@@ -1,15 +1,11 @@
 export type Flags = {
-  blockchain: {
+  binding: {
     type: "boolean";
     shortFlag: "b";
   };
   simulator: {
     type: "boolean";
     shortFlag: "s";
-  };
-  applet: {
-    type: "boolean";
-    shortFlag: "a";
   };
   erc20: {
     type: "boolean";
@@ -23,7 +19,7 @@ export type Flags = {
 
 export type Args = {
   directory: string;
-  blockchain: boolean | undefined;
+  binding: boolean | undefined;
   erc20: boolean | undefined;
   erc721: boolean | undefined;
   simulator: boolean | undefined;

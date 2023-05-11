@@ -13,7 +13,7 @@ export function extractSubdirsAndFeatures(args: Args): {
   const subdirs: string[] = ["applet"];
   const blockchainFeatures: string[] = [];
 
-  if (args.blockchain) {
+  if (args.binding || args.erc20 || args.erc721) {
     addTemplate(subdirs, "blockchain");
     addBlockchainFeatures(args, blockchainFeatures);
   }
@@ -30,6 +30,9 @@ function addTemplate(subdirs: string[], template: string) {
 }
 
 function addBlockchainFeatures(args: Args, blockchainFeatures: string[]) {
+  if (args.binding) {
+    blockchainFeatures.push("binding");
+  }
   if (args.erc20) {
     blockchainFeatures.push("erc20");
   }
@@ -69,15 +72,6 @@ export function copyBlockchainFeatures(
   });
 }
 
-export function initBlockchainTemplate(projectPath: string) {
-  const templateBlockchainPath = path.join(
-    __dirname,
-    "../../templates/blockchain"
-  );
-  const projectBlockchainPath = path.join(projectPath, "blockchain");
-  fs.copySync(templateBlockchainPath, projectBlockchainPath);
-}
-
 function copyBlockchainFeature(
   templateSubdirPath: string,
   projectSubdirPath: string
@@ -99,5 +93,8 @@ function addFeatureTaskToIndex(projectSubdirPath: string, feature: string) {
   }
   if (feature === "erc721") {
     fs.appendFileSync(taskIndex, `\nrequire("./nft");`);
+  }
+  if (feature === "binding") {
+    fs.appendFileSync(taskIndex, `\nrequire("./binding");`);
   }
 }

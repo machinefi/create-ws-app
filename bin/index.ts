@@ -11,7 +11,6 @@ import {
   copyTemplates,
   copyBlockchainFeatures,
   extractSubdirsAndFeatures,
-  initBlockchainTemplate,
 } from "./utils/helpers.js";
 import meowCli from "./meow-cli.js";
 import { Args } from "./types.js";
@@ -30,8 +29,7 @@ function copyFiles(args: Args) {
 
   copyTemplates(args.directory, TEMPLATE_DIR_NAME, subdirs);
 
-  if (args.blockchain) {
-    initBlockchainTemplate(args.directory);
+  if (args.binding || args.erc20 || args.erc721) {
     copyBlockchainFeatures(
       args.directory,
       TEMPLATE_DIR_NAME,
@@ -43,21 +41,22 @@ function copyFiles(args: Args) {
 async function installDependencies(args: Args) {
   const subdirs = extractSubdirsAndFeatures(args).subdirs;
 
-  await Promise.all(
-    subdirs.map(async (subdir) => {
-      const spinner = ora(`Installing dependencies for ${subdir}...`).start();
+  process.stdout.write("\n");
 
-      process.chdir(path.join(args.directory, subdir));
+  for (let i = 0; i < subdirs.length; i++) {
+    const subdir = subdirs[i];
+    const spinner = ora(`Installing dependencies for ${subdir}...`).start();
 
-      try {
-        await execa("npm", ["install"]);
-        spinner.succeed(`${subdir} dependencies installed!`);
-      } catch (error) {
-        spinner.fail(`${subdir} dependencies failed to install!`);
-        throw error;
-      }
-    })
-  );
+    process.chdir(path.join(args.directory, subdir));
+
+    try {
+      await execa("npm", ["install"]);
+      spinner.succeed(`${subdir} dependencies installed!`);
+    } catch (error) {
+      spinner.fail(`${subdir} dependencies failed to install!`);
+      throw error;
+    }
+  }
 
   logFinalMessage(args);
 }
@@ -74,7 +73,11 @@ function logFinalMessage(args: Args) {
   🎉  Project ${c.bold(args.directory)} is ready!
   ${appletInstructions(args)}
   ${args.simulator ? simulatorInstructions(args) : ""}
-  ${args.blockchain ? blockchainInstructions(args) : ""}
+  ${
+    args.binding || args.erc20 || args.erc721
+      ? blockchainInstructions(args)
+      : ""
+  }
   `);
 }
 
