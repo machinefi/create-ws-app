@@ -23,6 +23,10 @@ export function extractSubdirsAndFeatures(args: Args): {
     pushStringToArray(appletHandlers, "binding");
   }
 
+  if (args.erc20) {
+    pushStringToArray(appletHandlers, "erc20");
+  }
+
   if (args.simulator) {
     subdirs.simulator = "simulator";
   }

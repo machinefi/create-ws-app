@@ -86,6 +86,9 @@ function addHandlerToIndex(projectSubdirPath: string, handler: string) {
   if (handler === "start") {
     fs.appendFileSync(handlerIndex, `\nexport * from "./handlers/start";`);
   }
+  if (handler === "erc20") {
+    fs.appendFileSync(handlerIndex, `\nexport * from "./handlers/erc20";`);
+  }
 }
 
 function addFeatureTaskToIndex(projectSubdirPath: string, feature: string) {
