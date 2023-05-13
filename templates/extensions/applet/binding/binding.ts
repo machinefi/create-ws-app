@@ -1,36 +1,65 @@
 import { GetDataByRID, JSON, ExecSQL, Log } from "@w3bstream/wasm-sdk";
 import { String, Bool } from "@w3bstream/wasm-sdk/assembly/sql";
 
+import { getField, getPayloadValue } from "../utils/payload-parser";
+
+const DEVICE_BINDING_TABLE = "device_binding";
+const DEVICE_REGISTRY_TABLE = "devices_registry";
+
 export function handle_device_binding(rid: i32): i32 {
   Log("New Device Binding Detected: ");
-  let message_string = GetDataByRID(rid);
-  let message_json = JSON.parse(message_string) as JSON.Obj;
-  let topics = message_json.get("topics") as JSON.Arr;
-  let device_id = topics._arr[1].toString();
-  let owner_address_padded = topics._arr[2] as JSON.Str;
+  const topics = getTopics(rid);
 
-  let owner_address = owner_address_padded.valueOf().slice(26);
-  Log("Device ID: " + device_id);
-  Log("Owner Address: " + owner_address);
+  const deviceId = getDeviceId(topics);
+  Log("Device ID: " + deviceId);
 
-  // Store the device binding in the DB
-  Log("Storing device binding in DB...");
-  let sql = `INSERT INTO "device_binding" (device_id, owner_address) VALUES (?,?);`;
-  ExecSQL(sql, [new String(device_id), new String(owner_address)]);
+  const ownerAddr = getOwnerAddr(topics);
+  Log("Owner Address: " + ownerAddr);
+
+  storeDeviceBinding(deviceId, ownerAddr);
   return 0;
 }
 
 export function handle_device_registered(rid: i32): i32 {
   Log("New Device Registered Detected: ");
-  let message_string = GetDataByRID(rid);
-  let message_json = JSON.parse(message_string) as JSON.Obj;
-  let topics = message_json.get("topics") as JSON.Arr;
-  let device_id = topics._arr[1].toString();
-  Log("Device ID: " + device_id);
+  const topics = getTopics(rid);
 
-  // Store the device id in the DB
-  Log("Storing device id in DB...");
-  let sql = `INSERT INTO "devices_registry" (device_id, is_registered, is_active) VALUES (?,?,?);`;
-  ExecSQL(sql, [new String(device_id), new Bool(true), new Bool(true)]);
+  const deviceId = getDeviceId(topics);
+  Log("Device ID: " + deviceId);
+
+  storeDeviceId(deviceId);
   return 0;
+}
+
+function getTopics(rid: i32): JSON.Arr {
+  const deviceMessage = GetDataByRID(rid);
+  const payload = getPayloadValue(deviceMessage);
+  const topics = getField<JSON.Arr>(payload, "topics");
+
+  if (topics == null) {
+    assert(false, "Topics not found in payload");
+  }
+
+  return topics!;
+}
+
+function getDeviceId(topics: JSON.Arr): string {
+  return topics._arr[1].toString();
+}
+
+function getOwnerAddr(topics: JSON.Arr): string {
+  const ownerAddrPadded = topics._arr[2].toString();
+  return ownerAddrPadded.slice(26);
+}
+
+function storeDeviceBinding(deviceId: string, ownerAddr: string): void {
+  Log("Storing device binding in DB...");
+  const sql = `INSERT INTO "${DEVICE_BINDING_TABLE}" (device_id, owner_address) VALUES (?,?);`;
+  ExecSQL(sql, [new String(deviceId), new String(ownerAddr)]);
+}
+
+function storeDeviceId(deviceId: string): void {
+  Log("Storing device id in DB...");
+  const sql = `INSERT INTO "${DEVICE_REGISTRY_TABLE}" (device_id, is_registered, is_active) VALUES (?,?,?);`;
+  ExecSQL(sql, [new String(deviceId), new Bool(true), new Bool(true)]);
 }
