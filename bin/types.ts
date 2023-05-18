@@ -19,6 +19,14 @@ export type Flags = {
     type: "boolean";
     shortFlag: "m";
   };
+  help: {
+    type: "boolean";
+    shortFlag: "h";
+  };
+  yes: {
+    type: "boolean";
+    shortFlag: "y";
+  };
 };
 
 export type Args = {
@@ -28,4 +36,6 @@ export type Args = {
   erc721: boolean | undefined;
   simulator: boolean | undefined;
   minimal: boolean | undefined;
+  yes: boolean | undefined;
+  help: boolean | undefined;
 };

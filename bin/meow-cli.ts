@@ -13,13 +13,16 @@ const cli: Result<Flags> = meow(
       --binding, -b     Include an onchain device registration and binding template
       --erc20, -e       Include an ERC20 token template
       --erc721, -n      Include an ERC721 token template
-      --help            Display this message
+      --help, -h        Display this message
       --minimal, -m     Create a minimal applet without any tests and utils
+      -y                Skip prompts and use yes as the answer for all prompts
   
     ${c.bold("EXAMPLES")}
       $ npx create-ws-app
+      $ npx create-ws-app full-stack -y
+      $ npx create-ws-app simple-app -m
       $ npx create-ws-app simple-grid-with-token --binding --erc20
-      $ npx create-ws-app energy-meter-simulator -s
+      $ npx create-ws-app energy-meter-simulator -sbe
     `,
   {
     importMeta: import.meta,
@@ -43,6 +46,14 @@ const cli: Result<Flags> = meow(
       minimal: {
         type: "boolean",
         shortFlag: "m",
+      },
+      help: {
+        type: "boolean",
+        shortFlag: "h",
+      },
+      yes: {
+        type: "boolean",
+        shortFlag: "y",
       },
     },
   }
