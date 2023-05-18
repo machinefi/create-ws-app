@@ -65,15 +65,19 @@ async function installDependencies(args: Args) {
   logFinalMessage(args);
 }
 
-function logFinalMessage(args: Args) {
+function logWelcomeMessage() {
   console.log(`
-                                      
+                                        
   __  _  ________ _____  ______ ______  
   \\ \\/ \\/ /  ___/ \\__  \\ \\____ \\\\____ \\ 
    \\     /\\___ \\   / __ \\|  |_> >  |_> >
     \\/\\_//____  > (____  /   __/|   __/ 
               \\/       \\/|__|   |__|      
+`)
+}
 
+function logFinalMessage(args: Args) {
+  console.log(`
   🎉  Project ${c.bold(args.directory)} is ready!
   ${appletInstructions(args)}
   ${args.simulator ? simulatorInstructions(args) : ""}
@@ -86,6 +90,7 @@ function logFinalMessage(args: Args) {
 }
 
 (async () => {
+  logWelcomeMessage();
   const args = await normalizeArgs(meowCli);
   copyFiles(args);
   await installDependencies(args);
