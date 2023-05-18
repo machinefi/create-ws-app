@@ -24,6 +24,13 @@ async function normalizeDirectory(cli: Result<Flags>) {
 }
 
 async function normalizeFlags(cli: Result<Flags>) {
+  if (cli.flags.minimal) {
+    cli.flags.binding = false;
+    cli.flags.erc20 = false;
+    cli.flags.erc721 = false;
+    cli.flags.simulator = false;
+    return;
+  }
   if (!cli.flags.erc20) {
     cli.flags.erc20 = await promtConfirmation("erc20");
   }
