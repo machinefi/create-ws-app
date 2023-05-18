@@ -25,24 +25,17 @@ async function normalizeDirectory(cli: Result<Flags>) {
 
 async function normalizeFlags(cli: Result<Flags>) {
   if (cli.flags.minimal) {
-    cli.flags.binding = false;
-    cli.flags.erc20 = false;
-    cli.flags.erc721 = false;
-    cli.flags.simulator = false;
+    setFlagsValue(cli, false);
     return;
   }
-  if (!cli.flags.erc20) {
-    cli.flags.erc20 = await promtConfirmation("erc20");
+  if (cli.flags.yes) {
+    setFlagsValue(cli, true);
+    return;
   }
-  if (!cli.flags.erc721) {
-    cli.flags.erc721 = await promtConfirmation("erc721");
+  if (isAnyOfTheFlagsTrue(cli)) {
+    return;
   }
-  if (!cli.flags.binding) {
-    cli.flags.binding = await promtConfirmation("binding");
-  }
-  if (!cli.flags.simulator) {
-    cli.flags.simulator = await promtConfirmation("simulator");
-  }
+  await promtAllFlags(cli);
 }
 
 async function promptDir() {
@@ -59,6 +52,29 @@ async function promptDir() {
     },
   })) as { directory: string };
   return directory;
+}
+
+function setFlagsValue(cli: Result<Flags>, value: boolean) {
+  cli.flags.binding = value;
+  cli.flags.erc20 = value;
+  cli.flags.erc721 = value;
+  cli.flags.simulator = value;
+}
+
+function isAnyOfTheFlagsTrue(cli: Result<Flags>) {
+  return (
+    cli.flags.binding ||
+    cli.flags.erc20 ||
+    cli.flags.erc721 ||
+    cli.flags.simulator
+  );
+}
+
+async function promtAllFlags(cli: Result<Flags>) {
+  cli.flags.erc20 = await promtConfirmation("erc20");
+  cli.flags.erc721 = await promtConfirmation("erc721");
+  cli.flags.binding = await promtConfirmation("binding");
+  cli.flags.simulator = await promtConfirmation("simulator");
 }
 
 async function promtConfirmation(tmpName: string) {
