@@ -17,11 +17,11 @@ export function handle_data(rid: i32): i32 {
 
   const payload = getPayloadValue(deviceMessage);
 
-  validateField<JSON.Str>(payload, "public_key");
-  const pubKey = getField<JSON.Str>(payload, "public_key");
-  verifyPubKeyRegistered(pubKey!.valueOf());
+  validateField<JSON.Str>(payload, "deviceId");
+  const deviceId = getField<JSON.Str>(payload, "deviceId");
+  verifyDeviceRegistered(deviceId!.valueOf());
 
-  const ownerAddress = findOwnerAddress(pubKey!.valueOf());
+  const ownerAddress = findOwnerAddress(deviceId!.valueOf());
 
   Log("Owner address: " + ownerAddress);
   Log("Sending tokens to owner address...");
@@ -31,18 +31,18 @@ export function handle_data(rid: i32): i32 {
   return 0;
 }
 
-function verifyPubKeyRegistered(pk: string): void {
-  const pkQuery = `SELECT is_active FROM "devices_registry" WHERE public_key = ?;`;
-  const res = QuerySQL(pkQuery, [new String(pk)]);
+function verifyDeviceRegistered(id: string): void {
+  const deviceQuery = `SELECT is_active FROM "devices_registry" WHERE device_id = ?;`;
+  const res = QuerySQL(deviceQuery, [new String(id)]);
 
   if (res == "") {
     assert(false, "Public key not found in DB");
   }
 }
 
-function findOwnerAddress(pk: string): string {
-  const ownerAddrQuery = `SELECT owner_address FROM "device_binding" WHERE public_key = ?;`;
-  const res = QuerySQL(ownerAddrQuery, [new String(pk)]);
+function findOwnerAddress(id: string): string {
+  const ownerAddrQuery = `SELECT owner_address FROM "device_binding" WHERE device_id = ?;`;
+  const res = QuerySQL(ownerAddrQuery, [new String(id)]);
 
   if (res == "") {
     assert(false, "Owner address not found in DB");
