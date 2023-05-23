@@ -36,7 +36,7 @@ function verifyDeviceRegistered(id: string): void {
   const res = QuerySQL(deviceQuery, [new String(id)]);
 
   if (res == "") {
-    assert(false, "Public key not found in DB");
+    assert(false, "Device id not found in DB");
   }
 }
 
