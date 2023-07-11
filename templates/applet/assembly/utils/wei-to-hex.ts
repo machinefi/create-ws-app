@@ -1,14 +1,14 @@
-import { ethToWei, stringToFloat } from "./eth-to-wei";
+import { u128 } from "as-bignum/assembly";
 
-export function tokenNumberToHex(value: string): string {
+import { ethToWei } from "./eth-to-wei";
+
+export function tokenNumberToHex<T>(value: T): string {
   const weiStr = ethToWei(value);
   return weiToTxSlot(weiStr);
 }
 
 export function weiToTxSlot(value: string): string {
-  const valueFloat = stringToFloat(value);
-  const valueInt = valueFloat as u64;
-  const hexStr = intToHexStr(valueInt);
+  const hexStr = u128.from(value.toString()).toString(16);
   return composeAmountStr(hexStr);
 }
 

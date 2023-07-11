@@ -1,9 +1,9 @@
 import { tokenNumberToHex } from "./wei-to-hex";
 
-export function buildTxData(
+export function buildTxData<T>(
   functionAddr: string,
   recipient: string,
-  tokenAmount: string
+  tokenAmount: T
 ): string {
   const slotForRecipient = buildRecepientSlot(recipient);
   const slotForAmount = tokenNumberToHex(tokenAmount);
