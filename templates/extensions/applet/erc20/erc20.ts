@@ -26,7 +26,7 @@ export function handle_data(rid: i32): i32 {
   Log("Owner address: " + ownerAddress);
   Log("Sending tokens to owner address...");
 
-  mintRewards(ownerAddress);
+  mintRewards(ownerAddress, TOKEN_AMOUNT);
 
   return 0;
 }
@@ -55,9 +55,8 @@ function findOwnerAddress(id: string): string {
   return ownerAddr!.valueOf();
 }
 
-function mintRewards(ownerAddress: string): void {
-  Log(`Minting ${TOKEN_AMOUNT} token to ${ownerAddress}`);
-  const txData = buildTxData(MINT_FUNCTION_ADDR, ownerAddress, TOKEN_AMOUNT);
+function mintRewards<T>(ownerAddress: string, amount: T): void {
+  const txData = buildTxData(MINT_FUNCTION_ADDR, ownerAddress, amount);
   const res = SendTx(CHAIN_ID, TOKEN_CONTRACT_ADDRESS, "0", txData);
   Log("Send tx result:" + res);
 }

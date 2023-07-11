@@ -2,7 +2,7 @@ import { u128 } from "as-bignum/assembly";
 
 import { ethToWei } from "./eth-to-wei";
 
-export function tokenNumberToHex(value: string): string {
+export function tokenNumberToHex<T>(value: T): string {
   const weiStr = ethToWei(value);
   return weiToTxSlot(weiStr);
 }
