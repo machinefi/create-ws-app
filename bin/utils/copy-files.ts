@@ -92,14 +92,20 @@ function addHandlerToIndex(projectSubdirPath: string, handler: string) {
 }
 
 function addFeatureTaskToIndex(projectSubdirPath: string, feature: string) {
-  const taskIndex = path.join(projectSubdirPath, "tasks", "index.js");
+  const taskIndex = path.join(projectSubdirPath, "tasks", "index.ts");
+  if (feature === "binding") {
+    fs.appendFileSync(taskIndex, `\nrimport "./binding";`);
+  }
+  if (feature === "sbt") {
+    fs.appendFileSync(taskIndex, `\nimport "./sbt";`);
+  }
   if (feature === "erc20") {
-    fs.appendFileSync(taskIndex, `\nrequire("./erc20");`);
+    fs.appendFileSync(taskIndex, `\nimport "./erc20";`);
   }
   if (feature === "erc721") {
-    fs.appendFileSync(taskIndex, `\nrequire("./nft");`);
+    fs.appendFileSync(taskIndex, `\nimport "./nft";`);
   }
-  if (feature === "binding") {
-    fs.appendFileSync(taskIndex, `\nrequire("./binding");`);
+  if (feature === "erc1155") {
+    fs.appendFileSync(taskIndex, `\nimport "./rewards";`);
   }
 }

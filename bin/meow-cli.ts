@@ -13,6 +13,8 @@ const cli: Result<Flags> = meow(
       --binding, -b     Include an onchain device registration and binding template
       --erc20, -e       Include an ERC20 token template
       --erc721, -n      Include an ERC721 token template
+      --sbt, -t         Include a soul bound token template
+      --erc1155, -f     Include an ERC1155 token template
       --help, -h        Display this message
       --minimal, -m     Create a minimal applet without any tests and utils
       -y                Skip prompts and use yes as the answer for all prompts
@@ -42,6 +44,14 @@ const cli: Result<Flags> = meow(
       erc721: {
         type: "boolean",
         shortFlag: "n",
+      },
+      sbt: {
+        type: "boolean",
+        shortFlag: "t",
+      },
+      erc1155: {
+        type: "boolean",
+        shortFlag: "f",
       },
       minimal: {
         type: "boolean",

@@ -15,6 +15,14 @@ export type Flags = {
     type: "boolean";
     shortFlag: "n";
   };
+  sbt: {
+    type: "boolean";
+    shortFlag: "t";
+  };
+  erc1155: {
+    type: "boolean";
+    shortFlag: "f";
+  };
   minimal: {
     type: "boolean";
     shortFlag: "m";
@@ -34,6 +42,8 @@ export type Args = {
   binding: boolean | undefined;
   erc20: boolean | undefined;
   erc721: boolean | undefined;
+  erc1155: boolean | undefined;
+  sbt: boolean | undefined;
   simulator: boolean | undefined;
   minimal: boolean | undefined;
   yes: boolean | undefined;
