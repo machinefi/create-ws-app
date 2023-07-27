@@ -1,0 +1,234 @@
+{
+  "name": "drive_to_earn",
+  "description": "Mobility",
+  "database": {
+    "schemas": [
+      {
+        "schemaName": "public",
+        "tables": [
+          {
+            "tableName": "device_binding",
+            "tableSchema": "public",
+            "comment": "",
+            "columns": [
+              {
+                "name": "id",
+                "type": "int8",
+                "defaultValue": null,
+                "isIdentity": true,
+                "isNullable": false,
+                "isUnique": false,
+                "isPrimaryKey": true,
+                "comment": null
+              },
+              {
+                "name": "created_at",
+                "type": "timestamp",
+                "defaultValue": "now()",
+                "isIdentity": false,
+                "isNullable": false,
+                "isUnique": false,
+                "isPrimaryKey": false,
+                "comment": null
+              },
+              {
+                "name": "device_id",
+                "type": "text",
+                "defaultValue": null,
+                "isIdentity": false,
+                "isNullable": false,
+                "isUnique": true,
+                "isPrimaryKey": false,
+                "comment": null
+              },
+              {
+                "name": "owner_address",
+                "type": "text",
+                "defaultValue": null,
+                "isIdentity": false,
+                "isNullable": false,
+                "isUnique": false,
+                "isPrimaryKey": false,
+                "comment": null
+              }
+            ],
+            "relationships": []
+          },
+          {
+            "tableName": "device_registry",
+            "tableSchema": "public",
+            "comment": "",
+            "columns": [
+              {
+                "name": "id",
+                "type": "int8",
+                "defaultValue": null,
+                "isIdentity": true,
+                "isNullable": false,
+                "isUnique": false,
+                "isPrimaryKey": true,
+                "comment": null
+              },
+              {
+                "name": "created_at",
+                "type": "timestamp",
+                "defaultValue": "now()",
+                "isIdentity": false,
+                "isNullable": false,
+                "isUnique": false,
+                "isPrimaryKey": false,
+                "comment": null
+              },
+              {
+                "name": "device_id",
+                "type": "text",
+                "defaultValue": null,
+                "isIdentity": false,
+                "isNullable": false,
+                "isUnique": true,
+                "isPrimaryKey": false,
+                "comment": null
+              },
+              {
+                "name": "is_registered",
+                "type": "bool",
+                "defaultValue": null,
+                "isIdentity": false,
+                "isNullable": true,
+                "isUnique": false,
+                "isPrimaryKey": false,
+                "comment": null
+              },
+              {
+                "name": "is_active",
+                "type": "bool",
+                "defaultValue": null,
+                "isIdentity": false,
+                "isNullable": true,
+                "isUnique": false,
+                "isPrimaryKey": false,
+                "comment": null
+              }
+            ],
+            "relationships": []
+          },
+          {
+            "tableName": "distances",
+            "tableSchema": "public",
+            "comment": "",
+            "columns": [
+              {
+                "name": "id",
+                "type": "int8",
+                "defaultValue": null,
+                "isIdentity": true,
+                "isNullable": false,
+                "isUnique": false,
+                "isPrimaryKey": true,
+                "comment": null
+              },
+              {
+                "name": "created_at",
+                "type": "timestamp",
+                "defaultValue": "now()",
+                "isIdentity": false,
+                "isNullable": false,
+                "isUnique": false,
+                "isPrimaryKey": false,
+                "comment": null
+              },
+              {
+                "name": "device_id",
+                "type": "text",
+                "defaultValue": null,
+                "isIdentity": false,
+                "isNullable": false,
+                "isUnique": false,
+                "isPrimaryKey": false,
+                "comment": null
+              },
+              {
+                "name": "date",
+                "type": "text",
+                "defaultValue": null,
+                "isIdentity": false,
+                "isNullable": false,
+                "isUnique": false,
+                "isPrimaryKey": false,
+                "comment": null
+              },
+              {
+                "name": "distance",
+                "type": "float8",
+                "defaultValue": null,
+                "isIdentity": false,
+                "isNullable": false,
+                "isUnique": false,
+                "isPrimaryKey": false,
+                "comment": null
+              }
+            ],
+            "relationships": []
+          }
+        ]
+      }
+    ]
+  },
+  "envs": {
+    "env": [
+      [
+        "LOG_LEVEL",
+        "debug"
+      ],
+      [
+        "DEVICE_BINDING_TABLE",
+        "device_binding"
+      ],
+      [
+        "DEVICE_REGISTRY_TABLE",
+        "device_registry"
+      ],
+      [
+        "DISTANCE_TABLE",
+        "distances"
+      ],
+      [
+        "EVALUATION_PERIOD_DAYS",
+        "7"
+      ],
+      [
+        "EVALUATION_DISTANCE",
+        "50"
+      ],
+      [
+        "CHAIN_ID",
+        "4690"
+      ]
+    ]
+  },
+  "cronJob": [],
+  "contractLog": [],
+  "chainHeight": [],
+  "eventRounting": [
+    {
+      "eventType": "DEFAULT",
+      "handler": "start"
+    },
+    {
+      "eventType": "ON_DEVICE_REGISTERED",
+      "handler": "handle_device_registration"
+    },
+    {
+      "eventType": "ON_DEVICE_BOUND",
+      "handler": "handle_device_binding"
+    },
+    {
+      "eventType": "DISTANCE_DATA",
+      "handler": "handle_receive_data"
+    },
+    {
+      "eventType": "ANALYZE_DISTANCE_DATA",
+      "handler": "handle_analyze_data"
+    }
+  ]
+}
