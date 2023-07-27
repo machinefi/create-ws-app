@@ -1,4 +1,6 @@
-module.exports = async ({ getNamedAccounts, deployments }) => {
+import { DeployFunction } from "hardhat-deploy/types";
+
+const func: DeployFunction = async ({ getNamedAccounts, deployments }) => {
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
 
@@ -10,4 +12,6 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
 
   console.log("ExampleTokenERC721 deployed at block: ", tx.receipt.blockNumber);
 };
-module.exports.tags = ["ExampleTokenERC721"];
+
+func.tags = ["ExampleTokenERC721"];
+export default func;
