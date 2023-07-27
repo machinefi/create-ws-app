@@ -1,14 +1,16 @@
+import { task } from "hardhat/config";
+
 task("register-device", "Register a device")
   .addParam("deviceid", "Id of the device")
   .setAction(async (taskArgs, hre) => {
     const { deviceid } = taskArgs;
     const { deployments } = hre;
-    const [deployer] = await ethers.getSigners();
+    const [deployer] = await hre.ethers.getSigners();
 
-    const DevicesRegistry = await deployments.get("DevicesRegistry");
-    const deviceRegistry = await ethers.getContractAt(
-      "DevicesRegistry",
-      DevicesRegistry.address,
+    const DeviceRegistry = await deployments.get("DeviceRegistry");
+    const deviceRegistry = await hre.ethers.getContractAt(
+      "DeviceRegistry",
+      DeviceRegistry.address,
       deployer
     );
 
@@ -24,10 +26,10 @@ task("bind-device", "Bind a device to a user")
   .setAction(async (taskArgs, hre) => {
     const { deviceid, userid } = taskArgs;
     const { deployments } = hre;
-    const [deployer] = await ethers.getSigners();
+    const [deployer] = await hre.ethers.getSigners();
 
     const DeviceBinding = await deployments.get("DeviceBinding");
-    const deviceBinding = await ethers.getContractAt(
+    const deviceBinding = await hre.ethers.getContractAt(
       "DeviceBinding",
       DeviceBinding.address,
       deployer
