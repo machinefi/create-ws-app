@@ -4,12 +4,12 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-import "./DevicesRegistry.sol";
+import "./DeviceRegistry.sol";
 
 contract DeviceBinding is Ownable {
     using Counters for Counters.Counter;
 
-    DevicesRegistry public devicesRegistry;
+    DeviceRegistry public deviceRegistry;
     Counters.Counter private totalDevices;
 
     mapping(bytes32 => address) public deviceToOwner;
@@ -23,7 +23,7 @@ contract DeviceBinding is Ownable {
 
     modifier onlyAuthorizedDevice(bytes32 _deviceId) {
         require(
-            devicesRegistry.isAuthorizedDevice(_deviceId),
+            deviceRegistry.isAuthorizedDevice(_deviceId),
             "device is not authorized"
         );
         _;
@@ -51,8 +51,17 @@ contract DeviceBinding is Ownable {
         _;
     }
 
-    constructor(address _devicesRegistryAddress) {
-        devicesRegistry = DevicesRegistry(_devicesRegistryAddress);
+    constructor(address _deviceRegistryAddress) {
+        deviceRegistry = DeviceRegistry(_deviceRegistryAddress);
+    }
+
+    function bindDevices(
+        bytes32[] memory _deviceIds,
+        address _ownerAddress
+    ) public onlyOwner {
+        for (uint256 i = 0; i < _deviceIds.length; i++) {
+            bindDevice(_deviceIds[i], _ownerAddress);
+        }
     }
 
     function bindDevice(
