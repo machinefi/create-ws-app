@@ -11,11 +11,11 @@ const config: HardhatUserConfig = {
   networks: {
     testnet: {
       url: "https://babel-api.testnet.iotex.io",
-      accounts: [process.env.IOTEX_PRIVATE_KEY || ""],
+      accounts: [process.env.PRIVATE_KEY || ""],
     },
     mainnet: {
       url: "https://babel-api.mainnet.iotex.io",
-      accounts: [process.env.IOTEX_PRIVATE_KEY || ""],
+      accounts: [process.env.PRIVATE_KEY || ""],
     },
   },
   namedAccounts: {
