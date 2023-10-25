@@ -18,7 +18,7 @@ ${c.bold("npm start")}
 
 export const blockchainInstructions = (args: Args) => `
 ${c.cyan(
-  "🔗 To get started with onchain functionallity, type the following commands:"
+  "🔗 To get started with onchain functionallity, type the following commands:",
 )}
 cd ${args.directory}/blockchain
 touch .env ${c.dim("// and add your IoTeX Private Key to .env file")}

@@ -1,4 +1,5 @@
-const { expect } = require("chai");
+import { expect } from "chai";
+import { ethers } from "hardhat";
 
 describe("NFT", function () {
   it("Should deploy NFT", async function () {

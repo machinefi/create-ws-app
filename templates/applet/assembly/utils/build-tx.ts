@@ -1,24 +1,21 @@
-import { tokenNumberToHex } from "./wei-to-hex";
+import {
+  buildTxSlot,
+  buildTxString,
+  ethToHex,
+} from "@w3bstream/wasm-sdk/assembly/utility";
 
 export function buildTxData<T>(
   functionAddr: string,
   recipient: string,
-  tokenAmount: T
+  tokenAmount: T,
 ): string {
-  const slotForRecipient = buildRecepientSlot(recipient);
-  const slotForAmount = tokenNumberToHex(tokenAmount);
+  const slotForRecipient = buildTxSlot(recipient.replace("0x", ""));
+  const slotForAmount = tokenNumberToTxSlot(tokenAmount);
 
   return buildTxString([functionAddr, slotForRecipient, slotForAmount]);
 }
 
-function buildRecepientSlot(recipient: string): string {
-  return `000000000000000000000000${formatAddress(recipient)}`;
-}
-
-function formatAddress(address: string): string {
-  return address.replace("0x", "");
-}
-
-function buildTxString(args: string[]): string {
-  return "0x" + args.join("");
+function tokenNumberToTxSlot<T>(value: T): string {
+  const ethHex = ethToHex(value);
+  return buildTxSlot(ethHex);
 }

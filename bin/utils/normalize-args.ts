@@ -58,6 +58,8 @@ function setFlagsValue(cli: Result<Flags>, value: boolean) {
   cli.flags.binding = value;
   cli.flags.erc20 = value;
   cli.flags.erc721 = value;
+  cli.flags.erc1155 = value;
+  cli.flags.sbt = value;
   cli.flags.simulator = value;
 }
 
@@ -66,7 +68,9 @@ function isAnyOfTheFlagsTrue(cli: Result<Flags>) {
     cli.flags.binding ||
     cli.flags.erc20 ||
     cli.flags.erc721 ||
-    cli.flags.simulator
+    cli.flags.simulator ||
+    cli.flags.sbt ||
+    cli.flags.erc1155
   );
 }
 
@@ -75,6 +79,8 @@ async function promtAllFlags(cli: Result<Flags>) {
   cli.flags.erc721 = await promtConfirmation("erc721");
   cli.flags.binding = await promtConfirmation("binding");
   cli.flags.simulator = await promtConfirmation("simulator");
+  cli.flags.sbt = await promtConfirmation("sbt");
+  cli.flags.erc1155 = await promtConfirmation("erc1155");
 }
 
 async function promtConfirmation(tmpName: string) {
@@ -96,9 +102,13 @@ function buildMessage(tmpName: string) {
       return `${emoji} include a device ${tmpName} template?`;
     case "binding":
       return `${emoji} include an onchain device registration and binding template?`;
+    case "sbt":
+      return `${emoji} include an ${tmpName} template?`;
     case "erc20":
       return `${emoji} include an ${tmpName} token template?`;
     case "erc721":
+      return `${emoji} include an ${tmpName} token template?`;
+    case "erc1155":
       return `${emoji} include an ${tmpName} token template?`;
     default:
       return "";
@@ -115,6 +125,10 @@ function selectEmoji(tmpName: string) {
       return "🖼️ ";
     case "simulator":
       return "🤖";
+    case "sbt":
+      return "👤";
+    case "erc1155":
+      return "🎟️";
     default:
       return "";
   }

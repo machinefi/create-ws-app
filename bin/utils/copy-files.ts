@@ -7,7 +7,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 export function copyTemplates(
   projectPath: string,
   templatePath: string,
-  subdirs: { [key: string]: string }
+  subdirs: { [key: string]: string },
 ) {
   for (const [subdir, template] of Object.entries(subdirs)) {
     const templateSubdirPath = path.join(__dirname, templatePath, template);
@@ -19,14 +19,14 @@ export function copyTemplates(
 export function copyBlockchainFeatures(
   projectPath: string,
   templatePath: string,
-  blockchainFeatures: string[]
+  blockchainFeatures: string[],
 ) {
   blockchainFeatures.forEach((feature) => {
     const templateSubdirPath = path.join(
       __dirname,
       templatePath,
       "extensions",
-      feature
+      feature,
     );
     const projectSubdirPath = path.join(projectPath, "blockchain");
     copyBlockchainFeature(templateSubdirPath, projectSubdirPath);
@@ -38,7 +38,7 @@ export function copyBlockchainFeatures(
 export function copyAppletHandlers(
   projectPath: string,
   templatePath: string,
-  appletHandlers: string[]
+  appletHandlers: string[],
 ) {
   appletHandlers.forEach((handler) => {
     const templateSubdirPath = path.join(
@@ -46,7 +46,7 @@ export function copyAppletHandlers(
       templatePath,
       "extensions",
       "applet",
-      handler
+      handler,
     );
 
     const projectSubdirPath = path.join(projectPath, "applet", "assembly");
@@ -59,7 +59,7 @@ export function copyAppletHandlers(
 
 function copyBlockchainFeature(
   templateSubdirPath: string,
-  projectSubdirPath: string
+  projectSubdirPath: string,
 ) {
   const subdirs = ["contracts", "test", "tasks", "deploy"];
 
@@ -73,7 +73,7 @@ function copyBlockchainFeature(
 
 function copyAppletHandler(
   templateSubdirPath: string,
-  projectSubdirPath: string
+  projectSubdirPath: string,
 ) {
   fs.copySync(templateSubdirPath, projectSubdirPath);
 }
@@ -92,14 +92,20 @@ function addHandlerToIndex(projectSubdirPath: string, handler: string) {
 }
 
 function addFeatureTaskToIndex(projectSubdirPath: string, feature: string) {
-  const taskIndex = path.join(projectSubdirPath, "tasks", "index.js");
+  const taskIndex = path.join(projectSubdirPath, "tasks", "index.ts");
+  if (feature === "binding") {
+    fs.appendFileSync(taskIndex, `\nrimport "./binding";`);
+  }
+  if (feature === "sbt") {
+    fs.appendFileSync(taskIndex, `\nimport "./sbt";`);
+  }
   if (feature === "erc20") {
-    fs.appendFileSync(taskIndex, `\nrequire("./erc20");`);
+    fs.appendFileSync(taskIndex, `\nimport "./erc20";`);
   }
   if (feature === "erc721") {
-    fs.appendFileSync(taskIndex, `\nrequire("./nft");`);
+    fs.appendFileSync(taskIndex, `\nimport "./nft";`);
   }
-  if (feature === "binding") {
-    fs.appendFileSync(taskIndex, `\nrequire("./binding");`);
+  if (feature === "erc1155") {
+    fs.appendFileSync(taskIndex, `\nimport "./rewards";`);
   }
 }

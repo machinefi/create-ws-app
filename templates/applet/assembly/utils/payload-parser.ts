@@ -6,7 +6,7 @@ export function getPayloadValue(message: string): JSON.Obj {
 
 export function getField<T extends JSON.Value>(
   data: JSON.Obj,
-  field: string
+  field: string,
 ): T | null {
   return data.get(field) as T;
 }

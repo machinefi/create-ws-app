@@ -1,3 +1,5 @@
+import { task } from "hardhat/config";
+
 task("add-erc20-minter", "Grant erc20 token minter role to an address")
   .addParam("address", "Address to grant minter role to")
   .setAction(async (taskArgs, hre) => {
@@ -6,7 +8,11 @@ task("add-erc20-minter", "Grant erc20 token minter role to an address")
     const [deployer] = await ethers.getSigners();
 
     const Token = await deployments.get("Token");
-    const token = await ethers.getContractAt("Token", Token.address, deployer);
+    const token = await hre.ethers.getContractAt(
+      "Token",
+      Token.address,
+      deployer,
+    );
 
     const minterRole = await token.MINTER_ROLE();
     const tx = await token.grantRole(minterRole, address);

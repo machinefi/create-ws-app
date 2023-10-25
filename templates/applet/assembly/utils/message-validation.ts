@@ -11,7 +11,7 @@ class MessageValidationError extends Error {
 
 export function validateField<T extends JSON.Value>(
   data: JSON.Obj,
-  field: string
+  field: string,
 ): void {
   const value = getField<T>(data, field);
 

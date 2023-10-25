@@ -35,7 +35,7 @@ function copyFiles(args: Args) {
     copyBlockchainFeatures(
       args.directory,
       TEMPLATE_DIR_NAME,
-      blockchainFeatures
+      blockchainFeatures,
     );
   }
   copyAppletHandlers(args.directory, TEMPLATE_DIR_NAME, appletHandlers);
@@ -73,7 +73,7 @@ function logWelcomeMessage() {
    \\     /\\___ \\   / __ \\|  |_> >  |_> >
     \\/\\_//____  > (____  /   __/|   __/ 
               \\/       \\/|__|   |__|      
-`)
+`);
 }
 
 function logFinalMessage(args: Args) {

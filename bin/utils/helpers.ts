@@ -14,7 +14,7 @@ export function extractSubdirsAndFeatures(args: Args): {
   const appletPath = args.minimal ? path.join("light", "applet") : "applet";
   subdirs.applet = appletPath;
 
-  if (args.binding || args.erc20 || args.erc721) {
+  if (args.binding || args.erc20 || args.erc721 || args.erc1155 || args.sbt) {
     subdirs.blockchain = "blockchain";
     addBlockchainFeatures(args, blockchainFeatures);
   }
@@ -43,6 +43,12 @@ function addBlockchainFeatures(args: Args, blockchainFeatures: string[]) {
   }
   if (args.erc721) {
     pushStringToArray(blockchainFeatures, "erc721");
+  }
+  if (args.erc1155) {
+    pushStringToArray(blockchainFeatures, "erc1155");
+  }
+  if (args.sbt) {
+    pushStringToArray(blockchainFeatures, "sbt");
   }
 }
 

@@ -13,7 +13,7 @@
   "license": "ISC",
   "devDependencies": {
     "@as-pect/cli": "^8.1.0",
-    "@w3bstream/wasm-sdk": "^0.6.1",
+    "@w3bstream/wasm-sdk": "^0.12.0",
     "as-big": "^0.2.2",
     "as-bignum": "^0.2.40",
     "assemblyscript": "^0.27.0"

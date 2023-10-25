@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract DevicesRegistry is Ownable {
+contract DeviceRegistry is Ownable {
     event DeviceRegistered(bytes32 indexed _deviceId);
     event DeviceDeleted(bytes32 indexed _deviceId);
     event DeviceSuspended(bytes32 indexed _deviceId);
@@ -19,29 +19,29 @@ contract DevicesRegistry is Ownable {
     constructor() {}
 
     modifier onlyRegisteredDevice(bytes32 _deviceId) {
-        require(
-            devices[_deviceId].isRegistered,
-            "Data Source is not registered"
-        );
+        require(devices[_deviceId].isRegistered, "Device is not registered");
         _;
     }
 
     modifier onlyUnregisteredDevice(bytes32 _deviceId) {
-        require(
-            !devices[_deviceId].isRegistered,
-            "Data Source already registered"
-        );
+        require(!devices[_deviceId].isRegistered, "Device already registered");
         _;
     }
 
     modifier onlyActiveDevice(bytes32 _deviceId) {
-        require(devices[_deviceId].isActive, "Data Source is suspended");
+        require(devices[_deviceId].isActive, "Device is suspended");
         _;
     }
 
     modifier onlySuspendedDevice(bytes32 _deviceId) {
-        require(!devices[_deviceId].isActive, "Data Source is active");
+        require(!devices[_deviceId].isActive, "Device is active");
         _;
+    }
+
+    function registerDevices(bytes32[] memory _deviceIds) public onlyOwner {
+        for (uint256 i = 0; i < _deviceIds.length; i++) {
+            registerDevice(_deviceIds[i]);
+        }
     }
 
     function registerDevice(
@@ -82,15 +82,18 @@ contract DevicesRegistry is Ownable {
         emit DeviceActivated(_deviceId);
     }
 
-    function isAuthorizedDevice(
-        bytes32 _deviceId
-    )
-        public
-        view
-        onlyRegisteredDevice(_deviceId)
-        onlyActiveDevice(_deviceId)
-        returns (bool)
-    {
-        return true;
+    function isAuthorizedDevices(
+        bytes32[] memory _deviceIds
+    ) public view returns (bool[] memory isAuthorized) {
+        isAuthorized = new bool[](_deviceIds.length);
+        for (uint256 i = 0; i < _deviceIds.length; i++) {
+            isAuthorized[i] = isAuthorizedDevice(_deviceIds[i]);
+        }
+    }
+
+    function isAuthorizedDevice(bytes32 _deviceId) public view returns (bool) {
+        if (devices[_deviceId].isRegistered && devices[_deviceId].isActive) {
+            return true;
+        }
     }
 }
