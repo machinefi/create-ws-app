@@ -25,12 +25,12 @@ const addMonitorToConfig = (config: any, monitor: ContractMonitor) => {
 
 const isEventExistsInConfig = (
   config: any,
-  monitor: ContractMonitor
+  monitor: ContractMonitor,
 ): boolean => {
   const { contractLog } = config;
   const { eventType } = monitor;
   const res = contractLog.find(
-    (event: ContractMonitor) => event.eventType === eventType
+    (event: ContractMonitor) => event.eventType === eventType,
   );
   return !!res;
 };

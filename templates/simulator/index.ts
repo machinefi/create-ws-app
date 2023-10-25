@@ -1,5 +1,5 @@
 import { Simulator } from "@w3bstream/w3bstream-http-client-simulator";
-import 'dotenv/config'
+import "dotenv/config";
 
 import dataGenerator from "./generator";
 
@@ -17,7 +17,7 @@ simulator.dataPointGenerator = dataGenerator;
 async function start() {
   try {
     console.log("Starting simulator");
-    simulator.powerOn(MSG_INTERVAL_SEC, EVENT_TYPE)
+    simulator.powerOn(MSG_INTERVAL_SEC, EVENT_TYPE);
   } catch (error) {
     console.log(error);
   }

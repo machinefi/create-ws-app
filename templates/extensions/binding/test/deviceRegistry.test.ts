@@ -46,7 +46,7 @@ describe("Device Registry", function () {
       await DeviceRegistry.registerDevice(DEVICE1);
 
       await expect(
-        DeviceRegistry.registerDevices([DEVICE1, DEVICE2])
+        DeviceRegistry.registerDevices([DEVICE1, DEVICE2]),
       ).to.be.revertedWith("Device already registered");
     });
     it("Should register devices in a batch", async function () {
@@ -87,19 +87,17 @@ describe("Device Registry", function () {
 
       await DeviceRegistry.registerDevice(DEVICE3);
 
-      const isAuthorizedBatch = await DeviceRegistry.isAuthorizedDevices(
-        devicesIds
-      );
+      const isAuthorizedBatch =
+        await DeviceRegistry.isAuthorizedDevices(devicesIds);
 
       expect(isAuthorizedBatch).to.deep.equal([false, false, true, false]);
 
       await DeviceRegistry.registerDevices(
-        devicesIds.filter((_, id) => !isAuthorizedBatch[id])
+        devicesIds.filter((_, id) => !isAuthorizedBatch[id]),
       );
 
-      const isAuthorizedBatch2 = await DeviceRegistry.isAuthorizedDevices(
-        devicesIds
-      );
+      const isAuthorizedBatch2 =
+        await DeviceRegistry.isAuthorizedDevices(devicesIds);
 
       expect(isAuthorizedBatch2).to.deep.equal([true, true, true, true]);
     });

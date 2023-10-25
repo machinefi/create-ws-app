@@ -2,7 +2,7 @@ import { task } from "hardhat/config";
 
 task(
   "grant-rewards-minter",
-  "Grant rewards minter role to an address"
+  "Grant rewards minter role to an address",
 ).setAction(async (_, hre) => {
   const { deployments } = hre;
   const [deployer] = await hre.ethers.getSigners();
@@ -11,7 +11,7 @@ task(
   const rewards = await hre.ethers.getContractAt(
     "DeviceRewards",
     DeviceRewards.address,
-    deployer
+    deployer,
   );
 
   const minterRole = await rewards.MINTER_ROLE();
@@ -29,7 +29,7 @@ task("update-rewards-uri", "Update rewards uri").setAction(async (_, hre) => {
   const rewards = await hre.ethers.getContractAt(
     "DeviceRewards",
     DeviceRewards.address,
-    deployer
+    deployer,
   );
 
   const tx = await rewards.setURI(process.env.REWARDS_URI || "");

@@ -1,9 +1,13 @@
-import { buildTxSlot, buildTxString, ethToHex } from "@w3bstream/wasm-sdk/assembly/utility"
+import {
+  buildTxSlot,
+  buildTxString,
+  ethToHex,
+} from "@w3bstream/wasm-sdk/assembly/utility";
 
 export function buildTxData<T>(
   functionAddr: string,
   recipient: string,
-  tokenAmount: T
+  tokenAmount: T,
 ): string {
   const slotForRecipient = buildTxSlot(recipient.replace("0x", ""));
   const slotForAmount = tokenNumberToTxSlot(tokenAmount);

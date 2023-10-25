@@ -8,7 +8,11 @@ task("add-erc20-minter", "Grant erc20 token minter role to an address")
     const [deployer] = await ethers.getSigners();
 
     const Token = await deployments.get("Token");
-    const token = await hre.ethers.getContractAt("Token", Token.address, deployer);
+    const token = await hre.ethers.getContractAt(
+      "Token",
+      Token.address,
+      deployer,
+    );
 
     const minterRole = await token.MINTER_ROLE();
     const tx = await token.grantRole(minterRole, address);

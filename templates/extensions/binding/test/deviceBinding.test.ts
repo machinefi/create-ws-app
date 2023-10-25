@@ -14,7 +14,7 @@ async function setup() {
 
   const DeviceBinding = await ethers.getContractFactory("DeviceBinding");
   const deviceBindingInstance = await DeviceBinding.deploy(
-    deviceRegistryInstance.address
+    deviceRegistryInstance.address,
   );
   await deviceBindingInstance.deployed();
 
@@ -39,7 +39,7 @@ describe("Device Binding", function () {
     it("Should initialize the contract with Device Registry", async function () {
       const { DeviceBinding, DeviceRegistry } = await setup();
       expect(await DeviceBinding.deviceRegistry()).to.equal(
-        DeviceRegistry.address
+        DeviceRegistry.address,
       );
     });
   });
@@ -49,7 +49,7 @@ describe("Device Binding", function () {
       await DeviceRegistry.registerDevice(DEVICE_ID_1);
       await DeviceBinding.bindDevice(DEVICE_ID_1, user.address);
       expect(await DeviceBinding.getDeviceOwner(DEVICE_ID_1)).to.equal(
-        user.address
+        user.address,
       );
       expect(await DeviceBinding.getDevicesCount()).to.equal(1);
       expect(await DeviceBinding.getOwnedDevices(user.address)).to.eql([
@@ -63,10 +63,10 @@ describe("Device Binding", function () {
       await DeviceBinding.bindDevice(DEVICE_ID_1, user.address);
       await DeviceBinding.bindDevice(DEVICE_ID_2, user.address);
       expect(await DeviceBinding.getDeviceOwner(DEVICE_ID_1)).to.equal(
-        user.address
+        user.address,
       );
       expect(await DeviceBinding.getDeviceOwner(DEVICE_ID_2)).to.equal(
-        user.address
+        user.address,
       );
       expect(await DeviceBinding.getDevicesCount()).to.equal(2);
       expect(await DeviceBinding.getOwnedDevices(user.address)).to.eql([
@@ -85,13 +85,13 @@ describe("Device Binding", function () {
       await DeviceBinding.bindDevice(DEVICE_ID_3, user.address);
 
       expect(await DeviceBinding.getDeviceOwner(DEVICE_ID_1)).to.equal(
-        user.address
+        user.address,
       );
       expect(await DeviceBinding.getDeviceOwner(DEVICE_ID_2)).to.equal(
-        user_2.address
+        user_2.address,
       );
       expect(await DeviceBinding.getDeviceOwner(DEVICE_ID_3)).to.equal(
-        user.address
+        user.address,
       );
       expect(await DeviceBinding.getDevicesCount()).to.equal(3);
       expect(await DeviceBinding.getOwnedDevices(user.address)).to.eql([
@@ -114,13 +114,13 @@ describe("Device Binding", function () {
       await DeviceRegistry.registerDevice(DEVICE_ID_1);
       await DeviceBinding.bindDevice(DEVICE_ID_1, user.address);
       await expect(
-        DeviceBinding.bindDevice(DEVICE_ID_1, user.address)
+        DeviceBinding.bindDevice(DEVICE_ID_1, user.address),
       ).to.be.revertedWith("device has already been bound");
     });
     it("Should not bind a device if it is not authorized", async function () {
       const { DeviceBinding } = await setup();
       await expect(
-        DeviceBinding.bindDevice(DEVICE_ID_1, user.address)
+        DeviceBinding.bindDevice(DEVICE_ID_1, user.address),
       ).to.be.revertedWith("device is not authorized");
     });
     it("Should not bind a device if it was suspended", async function () {
@@ -128,7 +128,7 @@ describe("Device Binding", function () {
       await DeviceRegistry.registerDevice(DEVICE_ID_1);
       await DeviceRegistry.suspendDevice(DEVICE_ID_1);
       await expect(
-        DeviceBinding.bindDevice(DEVICE_ID_1, user.address)
+        DeviceBinding.bindDevice(DEVICE_ID_1, user.address),
       ).to.be.revertedWith("device is not authorized");
     });
     it("Should bind devices in batches", async function () {
@@ -138,10 +138,10 @@ describe("Device Binding", function () {
       await DeviceBinding.bindDevices([DEVICE_ID_1, DEVICE_ID_2], user.address);
 
       expect(await DeviceBinding.getDeviceOwner(DEVICE_ID_1)).to.equal(
-        user.address
+        user.address,
       );
       expect(await DeviceBinding.getDeviceOwner(DEVICE_ID_2)).to.equal(
-        user.address
+        user.address,
       );
     });
     it("Should emit events when binding devices in batches", async function () {
@@ -149,7 +149,7 @@ describe("Device Binding", function () {
       await DeviceRegistry.registerDevices([DEVICE_ID_1, DEVICE_ID_2]);
 
       await expect(
-        DeviceBinding.bindDevices([DEVICE_ID_1, DEVICE_ID_2], user.address)
+        DeviceBinding.bindDevices([DEVICE_ID_1, DEVICE_ID_2], user.address),
       )
         .to.emit(DeviceBinding, "OwnershipAssigned")
         .withArgs(DEVICE_ID_1, user.address)
@@ -161,14 +161,14 @@ describe("Device Binding", function () {
       await DeviceRegistry.registerDevices([DEVICE_ID_1, DEVICE_ID_2]);
       await DeviceBinding.bindDevice(DEVICE_ID_2, user.address);
       await expect(
-        DeviceBinding.bindDevices([DEVICE_ID_1, DEVICE_ID_2], user.address)
+        DeviceBinding.bindDevices([DEVICE_ID_1, DEVICE_ID_2], user.address),
       ).to.be.revertedWith("device has already been bound");
     });
     it("Should not bind devices in batches if they are not authorized", async function () {
       const { DeviceBinding, DeviceRegistry } = await setup();
       await DeviceRegistry.registerDevices([DEVICE_ID_1]);
       await expect(
-        DeviceBinding.bindDevices([DEVICE_ID_1, DEVICE_ID_2], user.address)
+        DeviceBinding.bindDevices([DEVICE_ID_1, DEVICE_ID_2], user.address),
       ).to.be.revertedWith("device is not authorized");
     });
   });
@@ -180,7 +180,7 @@ describe("Device Binding", function () {
 
       await DeviceBinding.unbindDevice(DEVICE_ID_1);
       expect(await DeviceBinding.getDeviceOwner(DEVICE_ID_1)).to.equal(
-        ZERO_ADDR
+        ZERO_ADDR,
       );
       expect(await DeviceBinding.getDevicesCount()).to.equal(0);
       expect(await DeviceBinding.getOwnedDevices(user.address)).to.eql([]);
@@ -195,7 +195,7 @@ describe("Device Binding", function () {
       await DeviceBinding.unbindDevice(DEVICE_ID_1);
       await DeviceBinding.unbindDevice(DEVICE_ID_2);
       expect(await DeviceBinding.getDeviceOwner(DEVICE_ID_1)).to.equal(
-        ZERO_ADDR
+        ZERO_ADDR,
       );
     });
     it("Should emit an event when unbinding a device", async function () {
@@ -213,7 +213,7 @@ describe("Device Binding", function () {
       await DeviceBinding.bindDevice(DEVICE_ID_1, user.address);
 
       await expect(DeviceBinding.unbindDevice(DEVICE_ID_2)).to.be.revertedWith(
-        "device is not bound"
+        "device is not bound",
       );
     });
     it("Should not unbind a device if it is already unbound", async function () {
@@ -223,7 +223,7 @@ describe("Device Binding", function () {
 
       await DeviceBinding.unbindDevice(DEVICE_ID_1);
       await expect(DeviceBinding.unbindDevice(DEVICE_ID_1)).to.be.revertedWith(
-        "device is not bound"
+        "device is not bound",
       );
     });
     it("Should not unbind a device if it is not owned by the sender", async function () {
@@ -232,7 +232,7 @@ describe("Device Binding", function () {
       await DeviceBinding.bindDevice(DEVICE_ID_1, user.address);
 
       await expect(
-        DeviceBinding.connect(badGuy).unbindDevice(DEVICE_ID_1)
+        DeviceBinding.connect(badGuy).unbindDevice(DEVICE_ID_1),
       ).to.be.revertedWith("not the device owner or admin");
     });
   });

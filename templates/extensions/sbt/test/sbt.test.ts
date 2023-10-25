@@ -2,7 +2,13 @@ import { ethers } from "hardhat";
 import { expect } from "chai";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { DEVICE_ID_1, DEVICE_ID_2, URI_EXAMPLE, SBT_CONTRACT_NAME, SBT_CONTRACT_SYMBOL } from "./fixtures";
+import {
+  DEVICE_ID_1,
+  DEVICE_ID_2,
+  URI_EXAMPLE,
+  SBT_CONTRACT_NAME,
+  SBT_CONTRACT_SYMBOL,
+} from "./fixtures";
 import { DeviceSBT } from "../typechain-types";
 
 async function setup() {
@@ -10,7 +16,7 @@ async function setup() {
   const sbtInstance = await sbt.deploy(
     URI_EXAMPLE,
     SBT_CONTRACT_NAME,
-    SBT_CONTRACT_SYMBOL
+    SBT_CONTRACT_SYMBOL,
   );
   await sbtInstance.deployed();
 
@@ -60,14 +66,14 @@ describe("DeviceSBT", function () {
     await sbt.connect(minter).safeMint(user.address, DEVICE_ID_1);
 
     await expect(
-      sbt.connect(user).transferFrom(user.address, badGuy.address, DEVICE_ID_1)
+      sbt.connect(user).transferFrom(user.address, badGuy.address, DEVICE_ID_1),
     ).to.be.revertedWith("DeviceSBT: Only minting allowed");
   });
   it("Minter cannot mint a token with an already used sbt id", async function () {
     await sbt.connect(minter).safeMint(user.address, DEVICE_ID_1);
 
     await expect(
-      sbt.connect(minter).safeMint(user.address, DEVICE_ID_1)
+      sbt.connect(minter).safeMint(user.address, DEVICE_ID_1),
     ).to.be.revertedWith("ERC721: token already minted");
   });
   it("Minter can approve a user to mint a sbt", async function () {
@@ -88,7 +94,7 @@ describe("DeviceSBT", function () {
   });
   it("User cannot mint a sbt if not approved", async function () {
     await expect(sbt.connect(user).mintSBT(DEVICE_ID_1)).to.be.revertedWith(
-      "ERC721: mint to the zero address"
+      "ERC721: mint to the zero address",
     );
   });
   it("User cannot mint a sbt if already minted", async function () {
@@ -96,7 +102,7 @@ describe("DeviceSBT", function () {
     await sbt.connect(user).mintSBT(DEVICE_ID_1);
 
     await expect(sbt.connect(user).mintSBT(DEVICE_ID_1)).to.be.revertedWith(
-      "ERC721: token already minted"
+      "ERC721: token already minted",
     );
   });
   it("Minter cannot mint a sbt if already minted by user", async function () {
@@ -104,7 +110,7 @@ describe("DeviceSBT", function () {
     await sbt.connect(user).mintSBT(DEVICE_ID_1);
 
     await expect(
-      sbt.connect(minter).safeMint(user.address, DEVICE_ID_1)
+      sbt.connect(minter).safeMint(user.address, DEVICE_ID_1),
     ).to.be.revertedWith("ERC721: token already minted");
   });
   it("admin can update uri", async function () {

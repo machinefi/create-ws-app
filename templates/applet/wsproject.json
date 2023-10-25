@@ -176,34 +176,13 @@
   },
   "envs": {
     "env": [
-      [
-        "LOG_LEVEL",
-        "debug"
-      ],
-      [
-        "DEVICE_BINDING_TABLE",
-        "device_binding"
-      ],
-      [
-        "DEVICE_REGISTRY_TABLE",
-        "device_registry"
-      ],
-      [
-        "DISTANCE_TABLE",
-        "distances"
-      ],
-      [
-        "EVALUATION_PERIOD_DAYS",
-        "7"
-      ],
-      [
-        "EVALUATION_DISTANCE",
-        "50"
-      ],
-      [
-        "CHAIN_ID",
-        "4690"
-      ]
+      ["LOG_LEVEL", "debug"],
+      ["DEVICE_BINDING_TABLE", "device_binding"],
+      ["DEVICE_REGISTRY_TABLE", "device_registry"],
+      ["DISTANCE_TABLE", "distances"],
+      ["EVALUATION_PERIOD_DAYS", "7"],
+      ["EVALUATION_DISTANCE", "50"],
+      ["CHAIN_ID", "4690"]
     ]
   },
   "cronJob": [],

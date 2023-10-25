@@ -66,7 +66,7 @@ const cli: Result<Flags> = meow(
         shortFlag: "y",
       },
     },
-  }
+  },
 );
 
 export default cli;

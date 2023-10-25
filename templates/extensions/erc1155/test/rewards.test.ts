@@ -14,7 +14,7 @@ async function setup() {
   const rewards = await ethers.getContractFactory("DeviceRewards");
   const rewardsInstance = await rewards.deploy(
     TIER_1_URI,
-    REWARDS_CONTRACT_NAME
+    REWARDS_CONTRACT_NAME,
   );
   await rewardsInstance.deployed();
 
@@ -29,7 +29,7 @@ async function setup() {
 
 async function grantMinterRole(
   rewards: DeviceRewards,
-  minter: SignerWithAddress
+  minter: SignerWithAddress,
 ) {
   const minterRole = await rewards.MINTER_ROLE();
   await rewards.grantRole(minterRole, minter.address);

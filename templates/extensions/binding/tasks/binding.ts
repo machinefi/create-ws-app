@@ -11,7 +11,7 @@ task("register-device", "Register a device")
     const deviceRegistry = await hre.ethers.getContractAt(
       "DeviceRegistry",
       DeviceRegistry.address,
-      deployer
+      deployer,
     );
 
     const tx = await deviceRegistry.registerDevice(deviceid);
@@ -32,7 +32,7 @@ task("bind-device", "Bind a device to a user")
     const deviceBinding = await hre.ethers.getContractAt(
       "DeviceBinding",
       DeviceBinding.address,
-      deployer
+      deployer,
     );
 
     const tx = await deviceBinding.bindDevice(deviceid, userid);

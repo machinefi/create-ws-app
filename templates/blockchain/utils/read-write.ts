@@ -11,6 +11,6 @@ export const getWSProjectConfig = () => {
 export const writeToConfig = (config: any) => {
   fs.writeFileSync(
     path.resolve(__dirname, PATH_TO_CONFIG),
-    JSON.stringify(config, null, 2)
+    JSON.stringify(config, null, 2),
   );
 };
